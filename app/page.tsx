@@ -119,16 +119,11 @@ export default function HomePage() {
           background: 'linear-gradient(120deg, var(--greige), var(--sand))',
           isolation: 'isolate',
         }}>
-          {/* Photo hero */}
-          <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-            <Image
-              src="/uploads/PHOTO-2026-06-02-13-06-47.jpg"
-              alt="Table dressée Maison Auréa"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center' }}
-              priority
-            />
-          </div>
+          {/* Photo hero — à remplacer via l'admin */}
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 0,
+            background: 'linear-gradient(135deg, var(--sand) 0%, var(--greige) 100%)',
+          }} />
 
           {/* Gradient overlay */}
           <div style={{
