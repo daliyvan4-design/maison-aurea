@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { sendContactEmails } from '@/lib/emails/send'
 
 const SUBJECTS = [
   'Question sur un produit',
@@ -38,7 +39,7 @@ export function ContactForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     startTransition(async () => {
-      await new Promise(r => setTimeout(r, 800))
+      await sendContactEmails(form)
       setSent(true)
     })
   }
