@@ -155,16 +155,19 @@ export function CartDrawer() {
               <span style={{ fontFamily: 'var(--font-cormorant), serif', fontSize: 22, color: 'var(--ink)' }}>{fmt(cartTotal())}</span>
             </div>
             <p style={{ fontSize: 11, color: 'var(--ink-soft)', marginBottom: 20 }}>Livraison calculée à l&apos;étape suivante</p>
-            <button style={{
-              width: '100%', padding: '16px',
-              background: 'var(--ink)', color: '#fff',
-              border: 'none', cursor: 'pointer',
-              fontFamily: 'var(--font-jost), sans-serif',
-              fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase',
-              borderRadius: 3, transition: 'background 0.3s',
-            }}>
+            <Link
+              href="/checkout"
+              onClick={closeCart}
+              style={{
+                display: 'block', width: '100%', padding: '16px',
+                background: 'var(--ink)', color: '#fff', textAlign: 'center',
+                fontFamily: 'var(--font-jost), sans-serif',
+                fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase',
+                borderRadius: 3, transition: 'background 0.3s',
+              }}
+            >
               Commander
-            </button>
+            </Link>
             <button
               onClick={closeCart}
               style={{

@@ -56,6 +56,42 @@ export async function uploadProductImage(formData: FormData) {
 
 /* ─── COMMANDES ─── */
 
+export async function createOrder(data: {
+  customerName: string
+  customerEmail: string | null
+  customerPhone: string | null
+  customerCity: string
+  items: Array<{ productId: number; name: string; price: number; qty: number; image?: string }>
+  subtotal: number
+  deliveryFee: number
+  total: number
+  notes?: string
+}) {
+  const year  = new Date().getFullYear()
+  const count = await db.select({ c: sql<number>`count(*)` }).from(orders)
+  const num   = String((count[0]?.c ?? 0) + 1).padStart(4, '0')
+  const ref   = `AUR-${year}-${num}`
+
+  await db.insert(orders).values({ ...data, ref, status: 'pending' })
+  revalidatePath('/admin/commandes')
+
+  if (data.customerEmail) {
+    const { sendOrderConfirmEmail } = await import('./emails/send')
+    await sendOrderConfirmEmail({
+      ref,
+      customerName:  data.customerName,
+      customerEmail: data.customerEmail,
+      items:         data.items,
+      subtotal:      data.subtotal,
+      deliveryFee:   data.deliveryFee,
+      total:         data.total,
+      city:          data.customerCity,
+    }).catch(() => {})
+  }
+
+  return ref
+}
+
 export async function getOrders(limit = 50) {
   return db.query.orders.findMany({ orderBy: desc(orders.createdAt), limit })
 }
