@@ -5,6 +5,7 @@ import { GrainOverlay }         from '@/components/layout/GrainOverlay'
 import { ScrollProgress }       from '@/components/layout/ScrollProgress'
 import { CustomCursor }         from '@/components/layout/CustomCursor'
 import { IntroLoader }          from '@/components/layout/IntroLoader'
+import { CartDrawer }          from '@/components/layout/CartDrawer'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ScrollProgress />
           <CustomCursor />
           <IntroLoader />
+          <CartDrawer />
           {children}
         </SmoothScrollProvider>
       </body>

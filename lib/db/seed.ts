@@ -1,4 +1,6 @@
-// Données de seed pour démo — executer avec : npx tsx lib/db/seed.ts
+// Données de seed pour démo — executer avec : npm run db:seed
+import { config } from 'dotenv'
+config({ path: '.env.local' })
 import { db } from './index'
 import { products, orders, deliveries } from './schema'
 

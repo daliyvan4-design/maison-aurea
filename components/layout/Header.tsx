@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useUIStore } from '@/lib/store'
+import { useUIStore, useCartStore } from '@/lib/store'
 
 const NAV = [
   { label: 'Accueil',     href: '/' },
@@ -26,7 +26,8 @@ const NAV = [
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
-  const openCart = useUIStore((s) => s.openCart)
+  const openCart   = useUIStore(s => s.openCart)
+  const cartCount  = useCartStore(s => s.cartCount())
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -200,7 +201,7 @@ export function Header() {
               fontSize: '9.5px', fontWeight: 500,
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              0
+              {cartCount}
             </span>
           </button>
         </div>

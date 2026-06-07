@@ -3,8 +3,14 @@
 import { db } from './db'
 import { products, orders, deliveries, type NewProduct } from './db/schema'
 import { eq, desc, sql, gte, and } from 'drizzle-orm'
-import { put } from '@vercel/blob'
+import { v2 as cloudinary } from 'cloudinary'
 import { revalidatePath } from 'next/cache'
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 /* ─── PRODUITS ─── */
 
@@ -32,8 +38,20 @@ export async function deleteProduct(id: number) {
 export async function uploadProductImage(formData: FormData) {
   const file = formData.get('file') as File
   if (!file) throw new Error('No file')
-  const blob = await put(`products/${Date.now()}-${file.name}`, file, { access: 'public' })
-  return blob.url
+
+  const buffer = Buffer.from(await file.arrayBuffer())
+
+  const url = await new Promise<string>((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      { folder: 'maison-aurea/products', resource_type: 'image' },
+      (err, result) => {
+        if (err || !result) reject(err ?? new Error('Cloudinary upload failed'))
+        else resolve(result.secure_url)
+      },
+    ).end(buffer)
+  })
+
+  return url
 }
 
 /* ─── COMMANDES ─── */
@@ -134,9 +152,6 @@ export async function getDashboardStats() {
 }
 
 export async function getSalesInsights() {
-  // Revenus par catégorie (depuis les items JSON)
-  const allOrders = await db.query.orders.findMany({ columns: { items: true, total: true, status: true } })
-
   // Revenus des 12 derniers mois
   const twelveMonthsAgo = new Date()
   twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 11)
