@@ -215,7 +215,7 @@ export function ProductsClient({ products }: { products: Product[] }) {
 
   const handleDelete = (id: number) => {
     if (!confirm('Supprimer ce produit ?')) return
-    startTransition(() => deleteProduct(id))
+    startTransition(async () => { await deleteProduct(id) })
   }
 
   const formInitial: FormState = editing ? {

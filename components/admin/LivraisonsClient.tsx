@@ -64,7 +64,7 @@ function DeliveryCard({ order }: { order: Order }) {
 
   const advance = () => {
     if (!nextStatus) return
-    startTransition(() => updateOrderStatus(order.id, nextStatus))
+    startTransition(async () => { await updateOrderStatus(order.id, nextStatus) })
   }
 
   return (
